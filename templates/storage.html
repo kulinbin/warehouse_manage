@@ -1,0 +1,91 @@
+{% extends "index.html" %}
+{% block details %}
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <div class="panel panel-info">
+        <div class="panel-heading">仓库信息</div>
+        <table class="table">
+            <tr>
+                <td>仓库编号</td>
+                <td>仓库名称</td>
+            </tr>
+            {% for line in  storage %}
+                <tr>
+                    <td>
+                        {{ line.storage_id }}
+                    </td>
+                    <td>
+                        {{ line.storage_name }}
+                    </td>
+
+                    <td>
+                        <form action="/goods/">
+                            <div class="btn-group" role="group" aria-label="...">
+                                <button onclick="storage_delete({{ line.storage_id }})" type="button" class="btn btn-default">删除
+                                </button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+
+            <div class="input-group input-group-sm">
+                <tr>
+
+                    <td>
+                        <input type="text" id="storage_id" name="storage_id" class="form-control" placeholder="仓库编号"
+                               aria-describedby="sizing-addon3">
+                    </td>
+                    <td>
+                        <input type="text" id='storage_name' name="storage_id" class="form-control" placeholder="仓库名字"
+                               aria-describedby="sizing-addon3">
+                    </td>
+
+                    <td>
+                        <div class="btn-group" role="group" aria-label="...">
+                            <button onclick="send()" type="button" class="btn btn-default">增加</button>
+                        </div>
+                    </td>
+                </tr>
+            </div>
+        </table>
+    </div>
+
+    <script type="text/javascript">
+        function send() {
+            sendData = {
+                "storage_id": document.getElementById("storage_id").value,
+                "storage_name": document.getElementById("storage_name").value,
+
+            };
+            $.ajax({
+                traditional: true,
+                url: "/storage/",
+                type: 'get',
+                data: sendData,
+                dataType: "json",
+                success: function (data) {
+                    location.reload()
+                }
+            })
+        }
+
+        function storage_delete(storage_id) {
+            sendData = {
+                "storage_id": storage_id,
+            };
+            $.ajax({
+                traditional: true,
+                url: "/storage_delete/",
+                type: 'get',
+                data: sendData,
+                dataType: "json",
+                success: function (data) {
+                    location.reload()
+                }
+            })
+        }
+    </script>
+
+{% endblock %}
+
+

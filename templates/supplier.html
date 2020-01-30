@@ -1,0 +1,91 @@
+{% extends "index.html" %}
+{% block details %}
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <div class="panel panel-info">
+        <div class="panel-heading">供应商信息</div>
+        <table class="table">
+            <tr>
+                <td>供应商编号</td>
+                <td>供应商名称</td>
+            </tr>
+            {% for line in  supplier %}
+                <tr>
+                    <td>
+                        {{ line.supplier_id }}
+                    </td>
+                    <td>
+                        {{ line.supplier_name }}
+                    </td>
+
+                    <td>
+                        <form action="/goods/">
+                            <div class="btn-group" role="group" aria-label="...">
+                                <button onclick="supplier_delete({{ line.supplier_id }})" type="button" class="btn btn-default">删除
+                                </button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+
+            <div class="input-group input-group-sm">
+                <tr>
+
+                    <td>
+                        <input type="text" id="supplier_id" name="supplier_id" class="form-control" placeholder="供应商编号"
+                               aria-describedby="sizing-addon3">
+                    </td>
+                    <td>
+                        <input type="text" id='supplier_name' name="supplier_id" class="form-control" placeholder="供应商名字"
+                               aria-describedby="sizing-addon3">
+                    </td>
+
+                    <td>
+                        <div class="btn-group" role="group" aria-label="...">
+                            <button onclick="send()" type="button" class="btn btn-default">增加</button>
+                        </div>
+                    </td>
+                </tr>
+            </div>
+        </table>
+    </div>
+
+    <script type="text/javascript">
+        function send() {
+            sendData = {
+                "supplier_id": document.getElementById("supplier_id").value,
+                "supplier_name": document.getElementById("supplier_name").value,
+
+            };
+            $.ajax({
+                traditional: true,
+                url: "/supplier/",
+                type: 'get',
+                data: sendData,
+                dataType: "json",
+                success: function (data) {
+                    location.reload()
+                }
+            })
+        }
+
+        function supplier_delete(supplier_id) {
+            sendData = {
+                "supplier_id": supplier_id,
+            };
+            $.ajax({
+                traditional: true,
+                url: "/supplier_delete/",
+                type: 'get',
+                data: sendData,
+                dataType: "json",
+                success: function (data) {
+                    location.reload()
+                }
+            })
+        }
+    </script>
+
+{% endblock %}
+
+

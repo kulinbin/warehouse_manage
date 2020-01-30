@@ -1,0 +1,91 @@
+{% extends "index.html" %}
+{% block details %}
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <div class="panel panel-info">
+        <div class="panel-heading">用户信息</div>
+        <table class="table">
+            <tr>
+                <td>用户编号</td>
+                <td>用户名称</td>
+            </tr>
+            {% for line in  subscriber %}
+                <tr>
+                    <td>
+                        {{ line.subscriber_id }}
+                    </td>
+                    <td>
+                        {{ line.subscriber_name }}
+                    </td>
+
+                    <td>
+                        <form action="/goods/">
+                            <div class="btn-group" role="group" aria-label="...">
+                                <button onclick="subscriber_delete({{ line.subscriber_id }})" type="button" class="btn btn-default">删除
+                                </button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+
+            <div class="input-group input-group-sm">
+                <tr>
+
+                    <td>
+                        <input type="text" id="subscriber_id" name="subscriber_id" class="form-control" placeholder="用户编号"
+                               aria-describedby="sizing-addon3">
+                    </td>
+                    <td>
+                        <input type="text" id='subscriber_name' name="subscriber_id" class="form-control" placeholder="用户名字"
+                               aria-describedby="sizing-addon3">
+                    </td>
+
+                    <td>
+                        <div class="btn-group" role="group" aria-label="...">
+                            <button onclick="send()" type="button" class="btn btn-default">增加</button>
+                        </div>
+                    </td>
+                </tr>
+            </div>
+        </table>
+    </div>
+
+    <script type="text/javascript">
+        function send() {
+            sendData = {
+                "subscriber_id": document.getElementById("subscriber_id").value,
+                "subscriber_name": document.getElementById("subscriber_name").value,
+
+            };
+            $.ajax({
+                traditional: true,
+                url: "/subscriber/",
+                type: 'get',
+                data: sendData,
+                dataType: "json",
+                success: function (data) {
+                    location.reload()
+                }
+            })
+        }
+
+        function subscriber_delete(subscriber_id) {
+            sendData = {
+                "subscriber_id": subscriber_id,
+            };
+            $.ajax({
+                traditional: true,
+                url: "/subscriber_delete/",
+                type: 'get',
+                data: sendData,
+                dataType: "json",
+                success: function (data) {
+                    location.reload()
+                }
+            })
+        }
+    </script>
+
+{% endblock %}
+
+

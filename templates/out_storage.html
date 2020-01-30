@@ -1,0 +1,131 @@
+{% extends "index.html" %}
+{% block details %}
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <div class="panel panel-info">
+        <div class="panel-heading">货物信息</div>
+        <table class="table">
+            <tr>
+                <td>出货编号</td>
+                <td>货物编号</td>
+                <td>仓库编号</td>
+                <td>用户编号</td>
+                <td>货物价格</td>
+                <td>货物数量</td>
+                <td>出货日期</td>
+            </tr>
+            {% for line in out_bill %}
+                <tr>
+                    <td>
+                        {{ line.out_id }}
+                    </td>
+                    <td>
+                        {{ line.goods_id }}
+                    </td>
+                    <td>
+                        {{ line.storage_id }}
+                    </td>
+                    <td>
+                        {{ line.subscriber_id }}
+                    </td>
+                    <td>
+                        {{ line.goods_price }}
+                    </td>
+                    <td>
+                        {{ line.goods_num }}
+                    </td>
+                    <td>
+                        {{ line.out_data }}
+                    </td>
+                    <td>
+                        <form action="/out_storage/">
+                            <div class="btn-group" role="group" aria-label="...">
+                                <button onclick="out_storage_delete({{ line.out_id }})" type="button" class="btn btn-default">删除
+                                </button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+
+            <div class="input-group input-group-sm">
+                <tr>
+
+                    <td>
+                        <input type="text" id="out_id" name="out_id" class="form-control" placeholder="出货编号"
+                               aria-describedby="sizing-addon3">
+                    </td>
+                    <td>
+                        <input type="text" id='goods_id' name="goods_id" class="form-control" placeholder="货物编号"
+                               aria-describedby="sizing-addon3">
+                    </td>
+                    <td>
+                        <input type="text" id='storage_id' name="storage_id" class="form-control" placeholder="仓库编号"
+                               aria-describedby="sizing-addon3">
+                    </td>
+                    <td>
+                        <input type="text" id='subscriber_id' name="subscriber_id" class="form-control" placeholder="用户编号"
+                               aria-describedby="sizing-addon3">
+                    </td>
+                    <td>
+                        <input type="text" id='goods_price' name="goods_price" class="form-control" placeholder="货物价格"
+                               aria-describedby="sizing-addon3">
+                    </td>
+                    <td>
+                        <input type="text" id='goods_num' name="goods_num" class="form-control" placeholder="货物数量"
+                               aria-describedby="sizing-addon3">
+                    </td>
+                    <td>
+                        <input type="text" id='out_data' name="out_data" class="form-control" placeholder="出货日期"
+                               aria-describedby="sizing-addon3">
+                    </td>
+                    <td>
+                        <div class="btn-group" role="group" aria-label="...">
+                            <button onclick="send()" type="button" class="btn btn-default">增加</button>
+                        </div>
+                    </td>
+                </tr>
+            </div>
+        </table>
+    </div>
+    <script type="text/javascript">
+        function send() {
+            sendData = {
+                "out_id": document.getElementById("out_id").value,
+                "goods_id": document.getElementById("goods_id").value,
+                "storage_id": document.getElementById("storage_id").value,
+                "subscriber_id": document.getElementById("subscriber_id").value,
+                "goods_price": document.getElementById("goods_price").value,
+                "goods_num": document.getElementById("goods_num").value,
+                "out_data": document.getElementById("out_data").value,
+            };
+            $.ajax({
+                traditional: true,
+                url: "/out_storage/",
+                type: 'get',
+                data: sendData,
+                dataType: "json",
+                success: function () {
+                    location.reload()
+                }
+            })
+        }
+
+        function out_storage_delete(out_id) {
+            sendData = {
+                "out_id": out_id,
+            };
+            $.ajax({
+                traditional: true,
+                url: "/out_storage_delete/",
+                type: 'get',
+                data: sendData,
+                dataType: "json",
+                success: function () {
+                    location.reload()
+                }
+            })
+        }
+    </script>
+
+{% endblock %}
+

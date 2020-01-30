@@ -1,0 +1,114 @@
+{% extends "index.html" %}
+{% block details %}
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <div class="panel panel-info">
+        <div class="panel-heading">货物信息</div>
+        <table class="table">
+            <tr>
+                <td>货物编号</td>
+                <td>货物名称</td>
+                <td>货物数量</td>
+                <td>货物类别</td>
+                <td>备注</td>
+            </tr>
+            {% for line in goods %}
+                <tr>
+                    <td>
+                        {{ line.goods_id }}
+                    </td>
+                    <td>
+                        {{ line.goods_name }}
+                    </td>
+                    <td>
+                        {{ line.goods_num }}
+                    </td>
+                    <td>
+                        {{ line.goods_sort }}
+                    </td>
+                    <td>
+                        {{ line.goods_remark }}
+                    </td>
+                    <td>
+                        <form action="/goods/">
+                            <div class="btn-group" role="group" aria-label="...">
+                                <button onclick="goods_delete({{ line.goods_id }})" type="button" class="btn btn-default">删除
+                                </button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+
+            <div class="input-group input-group-sm">
+                <tr>
+
+                    <td>
+                        <input type="text" id="goods_id" name="goods_id" class="form-control" placeholder="货物编号"
+                               aria-describedby="sizing-addon3">
+                    </td>
+                    <td>
+                        <input type="text" id='goods_name' name="goods_name" class="form-control" placeholder="货物名字"
+                               aria-describedby="sizing-addon3">
+                    </td>
+                    <td>
+                        <input type="text" id='goods_num' name="goods_num" class="form-control" placeholder="货物数量"
+                               aria-describedby="sizing-addon3">
+                    </td>
+                    <td>
+                        <input type="text" id='goods_sort' name="goods_sort" class="form-control" placeholder="货物类别"
+                               aria-describedby="sizing-addon3">
+                    </td>
+                    <td>
+                        <input type="text" id='goods_remark' name="goods_remark" class="form-control" placeholder="备注"
+                               aria-describedby="sizing-addon3">
+                    </td>
+                    <td>
+                        <div class="btn-group" role="group" aria-label="...">
+                            <button onclick="send()" type="button" class="btn btn-default">增加</button>
+                        </div>
+                    </td>
+                </tr>
+            </div>
+        </table>
+    </div>
+
+    <script type="text/javascript">
+        function send() {
+            sendData = {
+                "goods_id": document.getElementById("goods_id").value,
+                "goods_name": document.getElementById("goods_name").value,
+                "goods_num": document.getElementById("goods_num").value,
+                "goods_sort": document.getElementById("goods_sort").value,
+                "goods_remark": document.getElementById("goods_remark").value,
+            };
+            $.ajax({
+                traditional: true,
+                url: "/goods/",
+                type: 'get',
+                data: sendData,
+                dataType: "json",
+                success: function (data) {
+                    location.reload()
+                }
+            })
+        }
+
+        function goods_delete(goods_id) {
+            sendData = {
+                "goods_id": goods_id,
+            };
+            $.ajax({
+                traditional: true,
+                url: "/goods_delete/",
+                type: 'get',
+                data: sendData,
+                dataType: "json",
+                success: function (data) {
+                    location.reload()
+                }
+            })
+        }
+    </script>
+
+{% endblock %}
+
